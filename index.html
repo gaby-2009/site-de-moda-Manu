@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STEP UP | Moda em cada passo</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #faf9f6;
+  color: #222;
+}
+
+header {
+  background: #fff;
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px #00000010;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.logo span {
+  color: #b18a60;
+}
+
+nav {
+  display: flex;
+  gap: 25px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: #b18a60;
+}
+
+.cart-button {
+  background: #222;
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.hero {
+  min-height: 480px;
+  background:
+  linear-gradient(90deg, #0009, #0001),
+  url("https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1600")
+  center/cover;
+  display: flex;
+  align-items: center;
+  padding: 8%;
+  color: white;
+}
+
+.hero-content {
+  max-width: 500px;
+}
+
+.hero h1 {
+  font-size: clamp(38px, 6vw, 65px);
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.btn {
+  background: #b18a60;
+  color: white;
+  padding: 15px 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.btn:hover {
+  background: #8d6945;
+}
+
+section {
+  padding: 65px 7%;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.section-title h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.section-title p {
+  color: #777;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.filters button {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 11px 20px;
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+.filters button.active,
+.filters button:hover {
+  background: #222;
+  color: white;
+}
+
+.search {
+  display: block;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto 35px;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.product {
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: .3s;
+  position: relative;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px #00000012;
+}
+
+.product img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 17px;
+}
+
+.product-info h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.price {
+  color: #a77d50;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.product-info button {
+  width: 100%;
+  padding: 12px;
+  background: #222;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.product-info button:hover {
+  background: #b18a60;
+}
+
+.favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.promo {
+  background: #e9e0d5;
+  text-align: center;
+  padding: 65px 20px;
+}
+
+.promo h2 {
+  font-size: 34px;
+  margin-bottom: 15px;
+}
+
+.newsletter {
+  background: #292929;
+  color: white;
+  text-align: center;
+}
+
+.newsletter input {
+  padding: 14px;
+  width: min(300px, 100%);
+  border: none;
+  margin: 15px 5px;
+  border-radius: 3px;
+}
+
+footer {
+  background: #171717;
+  color: white;
+  text-align: center;
+  padding: 30px;
+  font-size: 13px;
+}
+
+/* Carrinho */
+
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: min(400px, 100%);
+  height: 100%;
+  background: white;
+  z-index: 200;
+  padding: 25px;
+  box-shadow: -5px 0 20px #0002;
+  transition: .3s;
+  overflow-y: auto;
+}
+
+.cart-panel.open {
+  right: 0;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.close {
+  border: none;
+  background: none;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item button {
+  border: none;
+  color: #c33;
+  background: none;
+  cursor: pointer;
+}
+
+.total {
+  margin-top: 25px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.checkout {
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  background: #b18a60;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.empty {
+  text-align: center;
+  color: #777;
+  padding: 30px 0;
+}
+
+@media(max-width: 900px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(max-width: 600px) {
+  header {
+    padding: 17px 5%;
+  }
+
+  nav {
+    display: none;
+  }
+
+  .hero {
+    min-height: 400px;
+  }
+
+  section {
+    padding: 45px 5%;
+  }
+
+  .products {
+    gap: 12px;
+  }
+
+  .product img {
+    height: 160px;
+  }
+
+  .product-info {
+    padding: 12px;
+  }
+
+  .product-info h3 {
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">STEP<span>UP.</span></div>
+
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#produtos">Coleção</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#contato">Contato</a>
+  </nav>
+
+  <button class="cart-button" onclick="toggleCart()">
+    🛍 Carrinho (<span id="cart-count">0</span>)
+  </button>
+</header>
+
+<main>
+
+<section class="hero" id="inicio">
+  <div class="hero-content">
+    <h1>Seu estilo começa pelos pés.</h1>
+    <p>
+      Descubra nossa coleção exclusiva de calçados.
+      Conforto, elegância e personalidade em cada passo.
+    </p>
+    <button class="btn" onclick="document.querySelector('#produtos').scrollIntoView()">
+      COMPRAR AGORA
+    </button>
+  </div>
+</section>
+
+<section id="produtos">
+  <div class="section-title">
+    <h2>Nossa coleção</h2>
+    <p>Encontre o sapato perfeito para você.</p>
+  </div>
+
+  <input
+    class="search"
+    id="search"
+    type="text"
+    placeholder="🔎 Pesquisar sapatos..."
+    oninput="renderProducts()"
+  >
+
+  <div class="filters">
+    <button class="active" onclick="filterProducts('Todos',this)">Todos</button>
+    <button onclick="filterProducts('Feminino',this)">Feminino</button>
+    <button onclick="filterProducts('Masculino',this)">Masculino</button>
+    <button onclick="filterProducts('Esportivo',this)">Esportivo</button>
+    <button onclick="filterProducts('Casual',this)">Casual</button>
+  </div>
+
+  <div class="products" id="products"></div>
+</section>
+
+<section class="promo" id="sobre">
+  <h2>Seu próximo passo começa aqui.</h2>
+  <p>Estilo, qualidade e conforto para acompanhar você.</p>
+</section>
+
+<section class="newsletter" id="contato">
+  <h2>Receba nossas novidades!</h2>
+  <p>Cadastre seu e-mail e fique por dentro das novidades.</p>
+
+  <form onsubmit="subscribe(event)">
+    <input type="email" id="email" placeholder="Seu melhor e-mail" required>
+    <button class="btn" type="submit">Cadastrar</button>
+  </form>
+</section>
+
+</main>
+
+<footer>
+  <h2>STEP UP.</h2>
+  <p>© 2026 STEP UP - Todos os direitos reservados.</p>
+  <p>Moda em cada passo.</p>
+</footer>
+
+<!-- Carrinho lateral -->
+
+<div class="cart-panel" id="cart">
+  <div class="cart-header">
+    <h2>Meu carrinho</h2>
+    <button class="close" onclick="toggleCart()">×</button>
+  </div>
+
+  <div id="cart-items"></div>
+
+  <div class="total">
+    Total: R$ <span id="total">0,00</span>
+  </div>
+
+  <button class="checkout" onclick="checkout()">
+    FINALIZAR COMPRA
+  </button>
+</div>
+
+<script>
+
+// Produtos da loja
+
+const products = [
+  {
+    id: 1,
+    name: "Tênis Urban White",
+    category: "Masculino",
+    price: 249.90,
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"
+  },
+  {
+    id: 2,
+    name: "Salto Elegance",
+    category: "Feminino",
+    price: 319.90,
+    image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600"
+  },
+  {
+    id: 3,
+    name: "Tênis Sport Pro",
+    category: "Esportivo",
+    price: 289.90,
+    image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600"
+  },
+  {
+    id: 4,
+    name: "Mocassim Classic",
+    category: "Masculino",
+    price: 199.90,
+    image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600"
+  },
+  {
+    id: 5,
+    name: "Sneaker Fashion",
+    category: "Feminino",
+    price: 229.90,
+    image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?w=600"
+  },
+  {
+    id: 6,
+    name: "Tênis Casual",
+    category: "Casual",
+    price: 179.90,
+    image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600"
+  },
+  {
+    id: 7,
+    name: "Runner Performance",
+    category: "Esportivo",
+    price: 349.90,
+    image: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=600"
+  },
+  {
+    id: 8,
+    name: "Sapato Premium",
+    category: "Masculino",
+    price: 399.90,
+    image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=600"
+  }
+];
+
+let cart = [];
+let favorites = [];
+let currentFilter = "Todos";
+
+// Formatar preço
+
+function money(value) {
+  return value.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2
+  });
+}
+
+// Mostrar produtos
+
+function renderProducts() {
+  const container = document.getElementById("products");
+  const search = document.getElementById("search").value.toLowerCase();
+
+  const filtered = products.filter(product => {
+    const categoryMatch =
+      currentFilter === "Todos" ||
+      product.category === currentFilter;
+
+    const searchMatch =
+      product.name.toLowerCase().includes(search);
+
+    return categoryMatch && searchMatch;
+  });
+
+  container.innerHTML = filtered.length
+    ? filtered.map(product => `
+      <div class="product">
+        <button class="favorite"
+          onclick="toggleFavorite(${product.id})">
+          ${favorites.includes(product.id) ? "❤️" : "♡"}
+        </button>
+
+        <img src="${product.image}" alt="${product.name}"
+          onerror="this.src='https://placehold.co/600x400?text=STEP+UP'">
+
+        <div class="product-info">
+          <h3>${product.name}</h3>
+          <p>${product.category}</p>
+          <div class="price">R$ ${money(product.price)}</div>
+          <button onclick="addToCart(${product.id})">
+            Adicionar ao carrinho
+          </button>
+        </div>
+      </div>
+    `).join("")
+    : "<p>Nenhum produto encontrado.</p>";
+}
+
+// Filtrar categorias
+
+function filterProducts(category, button) {
+  currentFilter = category;
+
+  document.querySelectorAll(".filters button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+  renderProducts();
+}
+
+// Favoritos
+
+function toggleFavorite(id) {
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(item => item !== id);
+  } else {
+    favorites.push(id);
+  }
+
+  renderProducts();
+}
+
+// Adicionar ao carrinho
+
+function addToCart(id) {
+  const product = products.find(item => item.id === id);
+
+  const existing = cart.find(item => item.id === id);
+
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push({...product, quantity: 1});
+  }
+
+  updateCart();
+  alert(product.name + " adicionado ao carrinho!");
+}
+
+// Remover produto
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  updateCart();
+}
+
+// Atualizar carrinho
+
+function updateCart() {
+  const container = document.getElementById("cart-items");
+
+  const count = cart.reduce(
+    (sum, item) => sum + item.quantity, 0
+  );
+
+  document.getElementById("cart-count").textContent = count;
+
+  if (cart.length === 0) {
+    container.innerHTML =
+      '<div class="empty">Seu carrinho está vazio 🛍</div>';
+  } else {
+    container.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div>
+          <strong>${item.name}</strong>
+          <p>${item.quantity} x R$ ${money(item.price)}</p>
+        </div>
+        <button onclick="removeFromCart(${item.id})">
+          Remover
+        </button>
+      </div>
+    `).join("");
+  }
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity, 0
+  );
+
+  document.getElementById("total").textContent = money(total);
+}
+
+// Abrir e fechar carrinho
+
+function toggleCart() {
+  document.getElementById("cart").classList.toggle("open");
+}
+
+// Finalizar compra
+
+function checkout() {
+  if (cart.length === 0) {
+    alert("Seu carrinho está vazio!");
+    return;
+  }
+
+  let message = "Olá! Gostaria de fazer este pedido:\n\n";
+
+  cart.forEach(item => {
+    message += `${item.name} - Quantidade: ${item.quantity}\n`;
+  });
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity, 0
+  );
+
+  message += `\nTotal: R$ ${money(total)}`;
+
+  // Substitua pelo número oficial da sua loja.
+  const whatsapp = "";
+
+  if (!/^\d{10,15}$/.test(whatsapp)) {
+    alert("Configure o número de WhatsApp da loja no código para receber pedidos.");
+    return;
+  }
+
+  window.open(
+    "https://wa.me/" + whatsapp + "?text=" +
+    encodeURIComponent(message),
+    "_blank"
+  );
+}
+
+// Newsletter
+
+function subscribe(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value;
+
+  alert("Obrigado! O e-mail " + email + " foi cadastrado nesta demonstração.");
+
+  event.target.reset();
+}
+
+// Inicialização
+
+renderProducts();
+updateCart();
+
+</script>
+
+</body>
+</html>
